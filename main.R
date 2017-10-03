@@ -1,4 +1,5 @@
 library(ggplot2)
+source("util.R")
 source("getdata.R")
 
 data <- getdata()
@@ -6,5 +7,12 @@ data <- getdata()
 data <- data[data$kW > 0,]
 # p <- ggplot(data) + geom_point(size=4, shape=15, aes(x=date(datetime), y = minute, col=kW)) + scale_colour_gradient(low = "blue", high="red")
 rect <- to_rect(data)
-p <- ggplot(rect) + geom_rect(aes(xmin=hmin, xmax=hmax, ymin=vmin, ymax=vmax, fill=kW)) + scale_fill_gradient(low="blue", high="red")
+
+y_ticks <- seq(7*60, 20*60, 90)
+p <- ggplot(rect) +
+  ggtitle("Inverter Power (kW)") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  geom_rect(aes(xmin=hmin, xmax=hmax, ymin=vmin, ymax=vmax, fill=kW)) +
+  scale_fill_gradient(low="blue", high="red") +
+  scale_y_continuous(breaks = y_ticks, labels = minutes_to_timestr(y_ticks))
 print(p)
