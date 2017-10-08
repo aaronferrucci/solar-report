@@ -1,5 +1,6 @@
 library(ggplot2)
-library("plyr")
+library(plyr)
+library(grid)
 source("util.R")
 source("getdata.R")
 
@@ -26,11 +27,16 @@ annotations <- data.frame(
 )
 
 y_ticks <- seq(7*60, 20*60, 90)
-p <- ggplot(rect) +
+p1 <- ggplot(rect) +
   ggtitle("Inverter Power (kW)") +
   theme(plot.title = element_text(hjust = 0.5)) +
   geom_rect(aes(xmin=hmin, xmax=hmax, ymin=vmin, ymax=vmax, fill=kW)) +
   scale_fill_gradient(low="blue", high="red") +
   scale_y_continuous(breaks = y_ticks, labels = minutes_to_timestr(y_ticks)) +
   annotate("text", x=annotations$x, y=annotations$y, label=annotations$label, angle=90)
-print(p)
+p2 <- ggplot(power) +
+  ggtitle("Power by Day") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  geom_line(aes(x=date, y=power)) +
+  ylim(0, max(power$power) * 1.05)
+grid.arrange(p2, p1)
