@@ -1,8 +1,11 @@
 library(ggplot2)
+library("plyr")
 source("util.R")
 source("getdata.R")
 
 data <- getdata()
+power <- getpowerbydate(data)
+
 # Remove 0-kW points, to show the trend of start/end times.
 data <- data[data$kW > 0,]
 # p <- ggplot(data) + geom_point(size=4, shape=15, aes(x=date(datetime), y = minute, col=kW)) + scale_colour_gradient(low = "blue", high="red")
