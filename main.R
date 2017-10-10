@@ -6,7 +6,7 @@ source("util.R")
 source("getdata.R")
 
 data <- getdata()
-power <- getpowerbydate(data)
+energy <- getenergybydate(data)
 
 # Remove 0-kW points, to show the trend of start/end times.
 data <- data[data$kW > 0,]
@@ -32,12 +32,14 @@ p1 <- ggplot(rect) +
   ggtitle("Inverter Power (kW)") +
   theme(plot.title = element_text(hjust = 0.5)) +
   geom_rect(aes(xmin=hmin, xmax=hmax, ymin=vmin, ymax=vmax, fill=kW)) +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank()) +
   scale_fill_gradient(low="blue", high="red") +
   scale_y_continuous(breaks = y_ticks, labels = minutes_to_timestr(y_ticks)) +
   annotate("text", x=annotations$x, y=annotations$y, label=annotations$label, angle=90)
-p2 <- ggplot(power) +
-  ggtitle("Power by Day") +
+p2 <- ggplot(energy) +
+  ggtitle("Energy per Day (kWh)") +
   theme(plot.title = element_text(hjust = 0.5)) +
-  geom_line(aes(x=date, y=power)) +
-  ylim(0, max(power$power) * 1.05)
+  geom_point(aes(x=date, y=energy)) +
+  geom_line(aes(x=date, y=energy)) +
+  ylim(0, max(energy$energy) * 1.05)
 grid.arrange(p2, p1)

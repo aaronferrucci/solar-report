@@ -44,9 +44,9 @@ to_rect <- function(data) {
   return(rect)
 }
 
-getpowerbydate <- function(data) {
-  power <- ddply(data, "date", summarize, power = max(raw, na.rm=T) - min(raw, na.rm=T))
-  power$date <- mdy(power$date)
-  power <- power[order(power$date),]
-  return(power)
+getenergybydate <- function(data) {
+  energy <- ddply(data, "date", summarize, energy = 0.001 * (max(raw, na.rm=T) - min(raw, na.rm=T)))
+  energy$date <- mdy(energy$date)
+  energy <- energy[order(energy$date),]
+  return(energy)
 }
