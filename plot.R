@@ -1,0 +1,33 @@
+library(gtable)
+plot <- function(rect, power) {
+  xmin <- min(rect$hmin) - 24*60*60
+  xmax <- max(rect$hmax) + 24*60*60
+  y_ticks <- seq(7*60, 20*60, 90)
+  p1 <- ggplot(rect) +
+    ggtitle("Inverter Power (kW)") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_rect(aes(xmin=hmin, xmax=hmax, ymin=vmin, ymax=vmax, fill=kW)) +
+    theme(axis.title.x = element_blank(), axis.title.y = element_blank()) +
+    scale_fill_gradient(low="blue", high="red") +
+    scale_y_continuous(breaks = y_ticks, labels = minutes_to_timestr(y_ticks)) +
+    xlim(c(xmin, xmax)) +
+    annotate("text", x=annotations$x, y=annotations$y, label=annotations$label, angle=90)
+  p2 <- ggplot(energy) +
+    ggtitle("Energy per Day (kWh)") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    geom_point(aes(x=date, y=energy)) +
+    geom_line(aes(x=date, y=energy)) +
+    xlim(c(xmin, xmax)) +
+    ylim(0, max(energy$energy) * 1.05)
+  
+  p1 <- ggplot_gtable(ggplot_build(p1))
+  p2 <- ggplot_gtable(ggplot_build(p2))
+
+  p2 <- gtable_add_cols(p2, p1$widths[8])
+  p2 <- gtable_add_cols(p2, p1$widths[9])
+
+  maxWidth <- unit.pmax(p1$widths, p2$widths)
+  p1$widths <- maxWidth
+  p2$widths <- maxWidth
+  grid.arrange(p2, p1)
+}
