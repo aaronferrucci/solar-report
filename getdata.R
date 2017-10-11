@@ -46,13 +46,8 @@ to_rect <- function(data) {
 
 getenergybydate <- function(data) {
   energy <- ddply(data, "date", summarize, energy = 0.001 * (max(raw, na.rm=T) - min(raw, na.rm=T)))
-  energy$date <- mdy(energy$date)
+  energy$date <- mdy_hm(paste(energy$date, "12:00"))
   energy <- energy[order(energy$date),]
 
-  # Dummy last item to compensate for rect's per-date width: 0:00 - 1:00 of the next day
-  # Problem: it's a copy of the last data, and shows on the plot. NA doesn't help (it's ignored).
-  # Is there a simpler way to do this simple thing: scale the two horizontal axes identically?
-  energy <- rbind(energy, energy[nrow(energy),])
-  energy$date[nrow(energy)] <- energy$date[nrow(energy)] + 1
   return(energy)
 }
