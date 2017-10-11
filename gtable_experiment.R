@@ -1,3 +1,4 @@
+library(gtable)
 p1 <- ggplot_gtable(ggplot_build(p1))
 p2 <- ggplot_gtable(ggplot_build(p2))
 
