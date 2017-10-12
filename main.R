@@ -18,13 +18,15 @@ annotations <- data.frame(
   x=c(
     force_tz(ymd_hm("2017-09-01 12:01"), "America/Los_Angeles"),
     force_tz(ymd_hm("2017-09-03 12:01"), "America/Los_Angeles"),
-    force_tz(ymd_hm("2017-09-17 12:01"), "America/Los_Angeles")
+    force_tz(ymd_hm("2017-09-17 12:01"), "America/Los_Angeles"),
+    force_tz(ymd_hm("2017-10-11 12:01"), "America/Los_Angeles")
   ),
   y=c(20*60),
   label=c(
     "smoky", # I observed it
     "cleaned", # cleaned the panels
-    "smoky" # according to nextdoor
+    "smoky", # according to nextdoor
+    "smoky"  # I observed it
   )
 )
 plot(rect, power)
