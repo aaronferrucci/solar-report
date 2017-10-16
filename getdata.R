@@ -51,3 +51,20 @@ getenergybydate <- function(data) {
 
   return(energy)
 }
+
+startendbydate <- function(data) {
+  start <- ddply(data, "date", summarize, start = min(time))
+  start$start <- with_tz(mdy_hms(paste(start$date, start$start)), "America/Los_Angeles")
+  start$start <- 60*hour(start$start) + minute(start$start)
+  start$date <- mdy_hm(paste(start$date, "12:00"))
+  start <- start[order(start$date),]
+
+  end <- ddply(data, "date", summarize, end=max(time))
+  end$end <- with_tz(mdy_hms(paste(end$date, end$end)), "America/Los_Angeles")
+  end$end <- 60*hour(end$end) + minute(end$end)
+  end$date <- mdy_hm(paste(end$date, "12:00"))
+  end <- end[order(end$date),]
+
+  startend <- merge(start, end, by="date")
+  return(startend)
+}

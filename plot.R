@@ -14,11 +14,11 @@ plot <- function(rect, power) {
     annotate("text", x=annotations$x, y=annotations$y, label=annotations$label, angle=90)
   p2 <- ggplot(energy) +
     ggtitle("Energy per Day (kWh)") +
-    theme(plot.title = element_text(hjust = 0.5)) +
+    theme(plot.title = element_text(hjust = 0.5), axis.title.x = element_blank(), axis.text.x = element_blank()) +
     geom_point(aes(x=date, y=energy)) +
     geom_line(aes(x=date, y=energy)) +
-    xlim(c(xmin, xmax)) +
-    ylim(0, max(energy$energy) * 1.05)
+    # ylim(0, max(energy$energy) * 1.05) +
+    xlim(c(xmin, xmax))
   
   p1 <- ggplot_gtable(ggplot_build(p1))
   p2 <- ggplot_gtable(ggplot_build(p2))
@@ -30,4 +30,22 @@ plot <- function(rect, power) {
   p1$widths <- maxWidth
   p2$widths <- maxWidth
   grid.arrange(p2, p1)
+}
+
+plotstart <- function(startend) {
+  y_min <- floor(min(startend$start) / 5) * 5
+  y_max <- ceiling(max(startend$start) / 5) * 5
+
+  y_ticks <- seq(y_min, y_max, 10)
+  p <- ggplot(startend) + geom_line(aes(x=date, y=start)) + scale_y_continuous(breaks=y_ticks, labels=minutes_to_timestr(y_ticks))
+  print(p)
+}
+
+plotend <- function(startend) {
+  y_min <- floor(min(startend$end) / 5) * 5
+  y_max <- ceiling(max(startend$end) / 5) * 5
+
+  y_ticks <- seq(y_min, y_max, 10)
+  p <- ggplot(startend) + geom_line(aes(x=date, y=end)) + scale_y_continuous(breaks=y_ticks, labels=minutes_to_timestr(y_ticks))
+  print(p)
 }
