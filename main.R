@@ -6,7 +6,10 @@ source("util.R")
 source("getdata.R")
 source("plot.R")
 
+
 data <- getdata()
+stopifnot(nrow(data) > 0)
+
 energy <- getenergybydate(data)
 
 # Remove 0-kW points, to show the trend of start/end times.
