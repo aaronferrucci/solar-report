@@ -1,4 +1,5 @@
 library(gtable)
+library(ggrepel)
 plot <- function(rect, power, startendmaxp) {
   xmin <- min(rect$hmin) - 24*60*60
   xmax <- max(rect$hmax) + 24*60*60
@@ -10,12 +11,11 @@ plot <- function(rect, power, startendmaxp) {
     theme(axis.title.x = element_blank(), axis.title.y = element_blank()) +
     scale_fill_gradient(low="blue", high="red") +
     scale_y_continuous(breaks = y_ticks, labels = minutes_to_timestr(y_ticks)) +
-    xlim(c(xmin, xmax)) +
-    annotate("text", x=annotations$x, y=annotations$y, label=annotations$label, angle=90)
+    xlim(c(xmin, xmax))
   p2 <- ggplot(energy) +
     ggtitle("Energy per Day (kWh)") +
     theme(plot.title = element_text(hjust = 0.5), axis.title.x = element_blank(), axis.text.x = element_blank()) +
-    geom_point(aes(x=date, y=energy)) +
+    # geom_point(aes(x=date, y=energy)) +
     geom_line(aes(x=date, y=energy)) +
     # ylim(0, max(energy$energy) * 1.05) +
     xlim(c(xmin, xmax))
@@ -23,9 +23,11 @@ plot <- function(rect, power, startendmaxp) {
   p3 <- ggplot(startendmaxp) +
     ggtitle("Max Power (kW)") +
     theme(plot.title = element_text(hjust = 0.5), axis.title.x = element_blank(), axis.text.x = element_blank()) +
-    geom_point(aes(x=date, y=maxp)) +
+    # geom_point(aes(x=date, y=maxp)) +
     geom_line(aes(x=date, y=maxp)) +
-    # ylim(0, max(energy$energy) * 1.05) +
+    # still covers the line, and I don't know how to do arrows
+    # consider annotate("segment") and a rotated text label.
+    # geom_label_repel(aes(x=date, y=maxp, label=startendmaxp$label), na.rm=T) +
     xlim(c(xmin, xmax))
 
   p1 <- ggplot_gtable(ggplot_build(p1))
