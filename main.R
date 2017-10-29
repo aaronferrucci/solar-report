@@ -11,6 +11,7 @@ data <- getdata()
 stopifnot(nrow(data) > 0)
 
 energy <- getenergybydate(data)
+startendmaxp <- startendmaxpbydate(data)
 
 # Remove 0-kW points, to show the trend of start/end times.
 data <- data[data$kW > 0,]
@@ -32,4 +33,4 @@ annotations <- data.frame(
     "smoky"  # I observed it
   )
 )
-plot(rect, power)
+plot(rect, power, startendmaxp)
