@@ -18,9 +18,17 @@ getdata_day <- function(dir, csv) {
   return(thisdata)
 }
 
-getdata <- function() {
+getdata <- function(dropfirst) {
+  if (missing(dropfirst)) {
+    dropfirst = FALSE
+  }
   dir <- "../../solar/data"
   days <- list.files(dir, pattern='*.csv', recursive=T)
+
+  if (dropfirst) {
+    # Drop the first (incomplete) day)
+    days <- days[2:length(days)]
+  }
 
   data <- data.frame()
   

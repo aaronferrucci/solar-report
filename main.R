@@ -6,7 +6,7 @@ source("util.R")
 source("getdata.R")
 source("plot.R")
 
-data <- getdata()
+data <- getdata(dropfirst=TRUE)
 stopifnot(nrow(data) > 0)
 
 energy <- getenergybydate(data)
