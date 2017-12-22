@@ -1,0 +1,15 @@
+---
+# title: "Solar Report"
+# author: "Aaron Ferrucci"
+# date: "December 21, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+```{r plot}
+source("main.R")
+```
+
