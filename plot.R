@@ -1,9 +1,20 @@
 library(gtable)
 library(ggrepel)
-plot <- function(rect, power, startendmaxp) {
+
+# Format a date as "Sep, '17", say.
+# Assumption: dates are first-of-the-month.
+datestr <- function(dt) {
+  m <- month(dt, label=T, abbr=T)
+  y <- year(dt) %% 100
+  dstr <- sprintf("%s '%02d", m, y)
+  return(dstr)
+}
+
+plot <- function(rect, startendmaxp) {
   xmin <- min(rect$hmin) - 24*60*60
   xmax <- max(rect$hmax) + 24*60*60
   y_ticks <- seq(7*60, 20*60, 90)
+  x_ticks <- seq(ceiling_date(min(rect$hmin), "month"), max(rect$hmin), "2 months")
   p1 <- ggplot(rect) +
     ggtitle("Inverter Power (kW)") +
     theme(plot.title = element_text(hjust = 0.5)) +
@@ -11,24 +22,19 @@ plot <- function(rect, power, startendmaxp) {
     theme(axis.title.x = element_blank(), axis.title.y = element_blank()) +
     scale_fill_gradient(low="blue", high="red") +
     scale_y_continuous(breaks = y_ticks, labels = minutes_to_timestr(y_ticks)) +
-    xlim(c(xmin, xmax))
+    scale_x_datetime(breaks = x_ticks, labels = datestr(x_ticks))
   p2 <- ggplot(energy) +
     ggtitle("Energy per Day (kWh)") +
     theme(plot.title = element_text(hjust = 0.5), axis.title.x = element_blank(), axis.text.x = element_blank()) +
-    # geom_point(aes(x=date, y=energy)) +
-    geom_line(aes(x=date, y=energy)) +
-    # ylim(0, max(energy$energy) * 1.05) +
-    xlim(c(xmin, xmax))
+    geom_line(aes(x=date, y=energy))
 
   p3 <- ggplot(startendmaxp) +
     ggtitle("Max Power (kW)") +
     theme(plot.title = element_text(hjust = 0.5), axis.title.x = element_blank(), axis.text.x = element_blank()) +
-    # geom_point(aes(x=date, y=maxp)) +
-    geom_line(aes(x=date, y=maxp)) +
+    geom_line(aes(x=date, y=maxp))
     # still covers the line, and I don't know how to do arrows
     # consider annotate("segment") and a rotated text label.
     # geom_label_repel(aes(x=date, y=maxp, label=startendmaxp$label), na.rm=T) +
-    xlim(c(xmin, xmax))
 
   p1 <- ggplot_gtable(ggplot_build(p1))
   p2 <- ggplot_gtable(ggplot_build(p2))

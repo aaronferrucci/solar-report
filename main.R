@@ -34,4 +34,4 @@ startendmaxp <- startendmaxpbydate(data, annotations)
 data <- data[data$kW > 0,]
 rect <- to_rect(data)
 
-plot(rect, power, startendmaxp)
+plot(rect, startendmaxp)
