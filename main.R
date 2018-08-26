@@ -16,14 +16,16 @@ annotations <- data.frame(
     with_tz(ymd_hm("2017-09-03 12:00"), "America/Los_Angeles"),
     with_tz(ymd_hm("2017-09-17 12:00"), "America/Los_Angeles"),
     with_tz(ymd_hm("2017-10-11 12:00"), "America/Los_Angeles"),
-    with_tz(ymd_hm("2017-11-29 12:00"), "America/Los_Angeles")
+    with_tz(ymd_hm("2017-11-29 12:00"), "America/Los_Angeles"),
+    with_tz(ymd_hm("2018-08-25 12:00"), "America/Los_Angeles")
   ),
   label=c(
     "smoky",   # I observed it
     "cleaned", # cleaned the panels
     "smoky",   # according to nextdoor
     "smoky",   # I observed it
-    "outage"   # pg&e fail: power back on around 8:30AM
+    "outage",  # pg&e fail: power back on around 8:30AM
+    "outage"   # pg&e work: power back on around 11:15AM
   ),
   stringsAsFactors=F
 )
