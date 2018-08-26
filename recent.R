@@ -24,3 +24,13 @@ p1 <- ggplot(rect2) +
     scale_x_datetime(breaks = x_ticks, labels = datestr(x_ticks))
 print(p1)
 
+data <- getdata(dropfirst=TRUE)
+data$date <- mdy(data$date)
+data <- data[data$date > now() - ddays(8),]
+p2_x_ticks <- seq(ceiling_date(min(rect2$hmin), "day"), max(rect2$hmin) + ddays(1), "1 days")
+p2 <- ggplot(data) +
+  ggtitle("Energy (kW)") +
+  geom_line(aes(x=datetime, y=kW)) +
+  theme(plot.title = element_text(hjust = 0.5)) + labs(x = "date") +
+  scale_x_datetime(breaks = p2_x_ticks, labels = datestr(p2_x_ticks))
+print(p2)
