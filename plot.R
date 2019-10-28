@@ -20,6 +20,7 @@ plot <- function(rect, startendmaxp) {
     theme(plot.title = element_text(hjust = 0.5)) +
     geom_rect(aes(xmin=hmin, xmax=hmax, ymin=vmin, ymax=vmax, fill=kW)) +
     theme(axis.title.x = element_blank(), axis.title.y = element_blank()) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     scale_fill_gradient(low="blue", high="red") +
     scale_y_continuous(breaks = y_ticks, labels = minutes_to_timestr(y_ticks)) +
     scale_x_datetime(breaks = x_ticks, labels = datestr(x_ticks))

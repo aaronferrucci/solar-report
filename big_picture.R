@@ -9,7 +9,7 @@ facet_label_fn <- function(m_b_0) {
   return(sprintf("%s", m_b_0))
 }
 
-data <- getdata(dropfirst=TRUE)
+data <- getdata(dropfirst=F)
 data$date <- mdy(data$date)
 data$year <- year(data$date)
 data$month <- month(data$date, label=T, abbr=T)
@@ -33,11 +33,29 @@ data$facet_label <- facet_labels$label[data$months + 1]
 
 p3_x_ticks <- seq(1, 31, 5)
 
+
 p3 <- ggplot(data) +
-  ggtitle("Energy (kW) by day, per month") +
+  ggtitle("Energy by day, per month") +
+  geom_line(aes(x=minute_in_month, y=kW)) +
+  facet_grid(facet_label ~ ., as.table=T) +
+  theme(plot.title = element_text(hjust = 0.5)) + labs(x = "day") +
+  scale_x_continuous(breaks = p3_x_ticks * 3600, labels=p3_x_ticks)
+print(p3)
+
+# Maybe the picture will be improved if I remove most of the data where kW=0 (stretching out those narrow peaks)
+# This had 0 effect - does "scale_x_continuous" mean that gaps in the x axis (minute_in_month) are imputed as 0-value?
+# Oops, my bug: need to trim data, then compute minute_in_month
+start_times <- aggregate(time ~ date, data[data$kW > 0,], min)
+end_times <- aggregate(time ~ date, data[data$kW > 0,], max)
+first_start_time <- min(start_times$time)
+last_end_time <- max(end_times$time)
+
+data2 <- data[data$time >= first_start_time & data$time <= last_end_time,]
+
+p4 <- ggplot(data2) +
+  ggtitle("Energy by day, per month") +
   geom_line(aes(x=minute_in_month, y=kW)) +
   facet_grid(facet_label ~ ., as.table=T) +
   theme(plot.title = element_text(hjust = 0.5)) + labs(x = "day") +
   scale_x_continuous(breaks = p3_x_ticks * 3600, labels=p3_x_ticks)
 
-print(p3)
