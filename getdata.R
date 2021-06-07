@@ -53,7 +53,7 @@ to_rect <- function(data) {
 }
 
 getenergybydate <- function(data) {
-  energy <- ddply(data, "date", summarize, energy = 0.001 * (max(raw, na.rm=T) - min(raw, na.rm=T)))
+  energy <- ddply(data, "date", summarize, energy = 0.001 * (max(data$raw, na.rm=T) - min(data$raw, na.rm=T)))
   energy$date <- mdy_hm(paste(energy$date, "12:00"))
   energy <- energy[order(energy$date),]
 
