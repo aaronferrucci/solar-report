@@ -31,7 +31,7 @@ getdata <- function(dropfirst) {
   }
 
   data <- data.frame()
-  
+
   for (day in days) {
     thisdata <- getdata_day(dir, day)
 
@@ -53,9 +53,15 @@ to_rect <- function(data) {
 }
 
 getenergybydate <- function(data) {
-  energy <- ddply(data, "date", summarize, energy = 0.001 * (max(data$raw, na.rm=T) - min(data$raw, na.rm=T)))
-  energy$date <- mdy_hm(paste(energy$date, "12:00"))
-  energy <- energy[order(energy$date),]
+  mx <- data %>% group_by(date) %>% summarize(val = max(raw, na.rm=T))
+  mx$date <- mdy_hm(paste(mx$date, " 12:00"))
+  mx <- mx[order(mx$date),]
+
+  mn <- data %>% group_by(date) %>% summarize(val = min(raw, na.rm=T))
+  mn$date <- mdy_hm(paste(mn$date, " 12:00"))
+  mn <- mn[order(mn$date),]
+
+  energy <- data.frame(date=mx$date, energy=mx$val - mn$val)
 
   return(energy)
 }
