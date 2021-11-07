@@ -1,4 +1,5 @@
 library(lubridate)
+library(dplyr)
 getdata_day <- function(dir, csv) {
   lines <- readLines(file.path(dir, csv))
 
