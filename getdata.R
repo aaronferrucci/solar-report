@@ -54,11 +54,11 @@ to_rect <- function(data) {
 }
 
 getenergybydate <- function(data) {
-  mx <- data %>% group_by(date) %>% summarize(val = max(raw, na.rm=T))
+  mx <- data %>% group_by(date) %>% na.omit %>% summarize(val = max(raw, na.rm=T))
   mx$date <- mdy_hm(paste(mx$date, " 12:00"))
   mx <- mx[order(mx$date),]
 
-  mn <- data %>% group_by(date) %>% summarize(val = min(raw, na.rm=T))
+  mn <- data %>% group_by(date) %>% na.omit %>% summarize(val = min(raw, na.rm=T))
   mn$date <- mdy_hm(paste(mn$date, " 12:00"))
   mn <- mn[order(mn$date),]
 
