@@ -16,7 +16,7 @@ getdata_day <- function(dir, csv) {
   # for plotting, I think I want a "minutes in this day" field
   thisdata$minute <- 60 * hour(thisdata$datetime) + minute(thisdata$datetime)
 
-  thisdata <- clean(thimdata)
+  thisdata <- clean(thisdata)
 
   return(thisdata)
 }
