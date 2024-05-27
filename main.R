@@ -6,6 +6,8 @@ source("util.R")
 source("getdata.R")
 source("plot.R")
 
+start <- proc.time();
+
 data <- getdata(dropfirst=TRUE)
 stopifnot(nrow(data) > 0)
 
@@ -37,3 +39,7 @@ data <- data[data$kW > 0,]
 rect <- to_rect(data)
 
 plot(rect, startendmaxp)
+
+duration <- proc.time() - start
+print("\nrun time:")
+print(duration)
