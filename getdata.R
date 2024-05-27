@@ -20,6 +20,25 @@ getdata_day <- function(dir, csv) {
 }
 
 getdata <- function(dropfirst) {
+  # dropfirst is ignored (makefile acts as though it's set to TRUE)
+  system("make all")
+  data <- read.csv("all.csv", stringsAsFactors=F)
+
+  # Read into data.frame, convert datetime
+  data$datetime <- with_tz(mdy_hms(paste(data$date, data$time)), "America/Los_Angeles")
+  # convert to a more R-friendly name
+  names(data)[names(data) == "power..kW."] <- "kW"
+
+  # for plotting, I think I want a "minutes in this day" field
+  data$minute <- 60 * hour(data$datetime) + minute(data$datetime)
+
+  data <- clean(data)
+
+  return(data)
+}
+
+# old slow method of getting data
+getdata.old <- function(dropfirst) {
   if (missing(dropfirst)) {
     dropfirst = FALSE
   }
