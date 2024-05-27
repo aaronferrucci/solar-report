@@ -16,6 +16,8 @@ getdata_day <- function(dir, csv) {
   # for plotting, I think I want a "minutes in this day" field
   thisdata$minute <- 60 * hour(thisdata$datetime) + minute(thisdata$datetime)
 
+  thisdata <- clean(thimdata)
+
   return(thisdata)
 }
 
@@ -89,4 +91,15 @@ startendmaxpbydate <- function(data, annotations) {
   startendmaxp <- merge(startendmaxp, annotations, by="date", all=T)
 
   return(startendmaxp)
+}
+
+clean <- function(data) {
+  # The first kW value for Dec 30, 2023 is a weird outlier: 34.824, where the
+  # typical value is small (say, 0.012). I don't think the corresponding raw
+  # value reflects the error, though I didn't look too closely. The following
+  # correct the outlier value to a typical value.
+  date <- "Sat Dec 30 2023"
+  time <- " 08:05:00 GMT-0800 (PST)"
+  data$kW[data$date == date & data$time == time] <- 0.012
+  return(data)
 }
