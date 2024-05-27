@@ -41,5 +41,5 @@ rect <- to_rect(data)
 plot(rect, startendmaxp)
 
 duration <- proc.time() - start
-print("\nrun time:")
+writeLines("\nrun time:")
 print(duration)
