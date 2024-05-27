@@ -16,8 +16,6 @@ getdata_day <- function(dir, csv) {
   # for plotting, I think I want a "minutes in this day" field
   thisdata$minute <- 60 * hour(thisdata$datetime) + minute(thisdata$datetime)
 
-  thisdata <- clean(thisdata)
-
   return(thisdata)
 }
 
@@ -41,6 +39,9 @@ getdata <- function(dropfirst) {
     # add this day's data to the aggregate
     data <- rbind(data, thisdata)
   }
+
+  data <- clean(data)
+
   return(data)
 }
 
