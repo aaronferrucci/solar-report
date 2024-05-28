@@ -121,5 +121,10 @@ clean <- function(data) {
   date <- "Sat Dec 30 2023"
   time <- " 08:05:00 GMT-0800 (PST)"
   data$kW[data$date == date & data$time == time] <- 0.012
+
+  # and another oddball case: the last sample of the day before
+  date <- "Fri Dec 29 2023"
+  time <- " 17:05:00 GMT-0800 (PST)"
+  data$kW[data$date == date & data$time == time] <- 0.012
   return(data)
 }
