@@ -10,6 +10,8 @@ facet_label_fn <- function(m_b_0) {
 }
 
 data <- getdata(dropfirst=F)
+# this data set has become too large to view in this plot - trim to most recent
+data <- tail(data, n=100000)
 data$date <- mdy(data$date)
 data$year <- year(data$date)
 data$month <- month(data$date, label=T, abbr=T)
