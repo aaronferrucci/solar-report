@@ -10,7 +10,7 @@ datestr <- function(dt) {
   return(dstr)
 }
 
-plot <- function(rect, startendmaxp) {
+plot_rect <- function(rect) {
   xmin <- min(rect$hmin) - 24*60*60
   xmax <- max(rect$hmax) + 24*60*60
   y_ticks <- seq(7*60, 20*60, 90)
@@ -24,6 +24,11 @@ plot <- function(rect, startendmaxp) {
     scale_fill_gradient(low="blue", high="red") +
     scale_y_continuous(breaks = y_ticks, labels = minutes_to_timestr(y_ticks)) +
     scale_x_datetime(breaks = x_ticks, labels = datestr(x_ticks))
+  return(p1)
+}
+
+plot <- function(rect, startendmaxp) {
+  p1 <- plot_rect(rect)
   p2 <- ggplot(energy) +
     ggtitle("Energy per Day (kWh)") +
     theme(plot.title = element_text(hjust = 0.5), axis.title.x = element_blank(), axis.text.x = element_blank()) +
