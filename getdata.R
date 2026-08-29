@@ -117,7 +117,7 @@ clean <- function(data) {
   # The first kW value for Dec 30, 2023 is a weird outlier: 34.824, where the
   # typical value is small (say, 0.012). I don't think the corresponding raw
   # value reflects the error, though I didn't look too closely. The following
-  # correct the outlier value to a typical value.
+  # corrects the outlier value to a typical value.
   date <- "Sat Dec 30 2023"
   time <- " 08:05:00 GMT-0800 (PST)"
   data$kW[data$date == date & data$time == time] <- 0.012
@@ -126,5 +126,16 @@ clean <- function(data) {
   date <- "Fri Dec 29 2023"
   time <- " 17:05:00 GMT-0800 (PST)"
   data$kW[data$date == date & data$time == time] <- 0.012
+
+  # one-off cleanup, one datapoint is far out of range
+  date <- "Thu Feb 12 2026"
+  time <- " 04:35:00 GMT-0800 (PST)"
+  i <- which(data$date == date & data$time == time)
+  err_delta <- data$raw[i] - data$raw[i - 1]
+  # correct kW to 0
+  data$kW[i] <- 0
+  # correct cumulative data from the error time/date onward
+  data$raw[i:nrow(data)] <- data$raw[i:nrow(data)] - err_delta
+
   return(data)
 }
